@@ -89,6 +89,7 @@ class Profil(models.Model):
     nom         = models.CharField(max_length=100)
     prenom      = models.CharField(max_length=100)
     photo       = models.ImageField(upload_to='profil/')
+    photo_about = models.ImageField(upload_to='profil/', null=True, blank=True)
     titre       = models.CharField(max_length=200)  # ex: "Software Engineer / DevOps Engineer"
     tagline     = models.CharField(max_length=500, blank=True) # Hero section summary
     bio         = models.TextField()  # bio / à propos
