@@ -3,6 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:14
+    command: postgres -p 5437
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -10,7 +11,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5437:5437"
 
   web:
     build: .
