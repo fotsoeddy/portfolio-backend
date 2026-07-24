@@ -9,3 +9,4 @@ drf-spectacular
 # Optional: for email sending if using a specific backend later
 # django-sendgrid-v5
 gunicorn
+django-jazzmin

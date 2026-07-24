@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sgk05*p#)^3y$0nkf3gnza^cx!vf^0!%$3loa2$9dq^p1$7%w&'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-sgk05*p#)^3y$0nkf3gnza^cx!vf^0!%$3loa2$9dq^p1$7%w&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [origin.strip() for origin in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,web').split(',') if origin.strip()]
 
@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [origin.strip() for origin in config('ALLOWED_HOSTS', default='l
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
