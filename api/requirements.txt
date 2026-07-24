@@ -1,4 +1,4 @@
-Django>=6.0.2
+Django
 djangorestframework
 python-decouple
 psycopg2-binary
@@ -8,3 +8,4 @@ django-ckeditor
 drf-spectacular
 # Optional: for email sending if using a specific backend later
 # django-sendgrid-v5
+gunicorn
