@@ -16,4 +16,11 @@ RUN pip install --upgrade pip \
 
 COPY . /app/
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8100"]
+# Make the entrypoint script executable
+RUN chmod +x /app/scripts/entrypoint.sh
+
+# Set the entrypoint script
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]
+
+# Set the default command
+CMD ["gunicorn", "api.wsgi:application", "--bind", "0.0.0.0:8100"]

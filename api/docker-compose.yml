@@ -15,7 +15,7 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8100
+    command: gunicorn api.wsgi:application --bind 0.0.0.0:8100
     volumes:
       - .:/app
     ports:
