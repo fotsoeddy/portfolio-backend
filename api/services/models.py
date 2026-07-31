@@ -135,6 +135,10 @@ class Profil(models.Model):
     # Infos pro
     disponible  = models.BooleanField(default=True)
     années_experience = models.IntegerField(default=0)
+    projets_contribues = models.IntegerField(
+        default=25,
+        help_text="Client/freelance/academic projects contributed to (not open source) — shown on the portfolio's projects section.",
+    )
     
     def __str__(self):
         return f"{self.prenom} {self.nom}"
