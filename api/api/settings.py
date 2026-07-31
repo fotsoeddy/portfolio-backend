@@ -146,6 +146,8 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=True)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='')
+SERVER_EMAIL = config('SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
+EMAIL_SUBJECT_PREFIX = config('EMAIL_SUBJECT_PREFIX', default='[Portfolio] ')
 ADMIN_EMAIL = config('ADMIN_EMAIL', default='fotsoeddysteve@gmail.com')
 
 # REST Framework Configuration
@@ -154,6 +156,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/hour',
+    },
 }
 
 SPECTACULAR_SETTINGS = {
