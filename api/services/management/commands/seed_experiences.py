@@ -33,6 +33,15 @@ class Command(BaseCommand):
                 'date_fin': None,
                 'position': 'On-site / Hybrid',
                 'pays': 'Cameroon'
+            },
+            {
+                'titre': 'Frontend Engineer',
+                'compagnie': 'Unemployed',
+                'description': 'Designed and developed responsive, user-friendly web interfaces using React.js, Next.js and Tailwind CSS, focusing on performance and UX.',
+                'date_debut': datetime.date(2024, 4, 1),
+                'date_fin': datetime.date(2026, 1, 1),
+                'position': 'Remote',
+                'pays': 'USA'
             }
         ]
 
