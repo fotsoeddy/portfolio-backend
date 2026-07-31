@@ -12,10 +12,11 @@ class Command(BaseCommand):
     help = "Seeds (or updates) the single portfolio Profil row"
 
     def handle(self, *args, **kwargs):
-        profile, created = Profil.objects.get_or_create(
-            email="fotsoeddysteve@gmail.com",
-            defaults={"nom": "Steve", "prenom": "Fotso Eddy"},
-        )
+        deleted, _ = Profil.objects.all().delete()
+        if deleted:
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted} existing profile row(s)."))
+
+        profile = Profil(email="fotsoeddysteve@gmail.com")
 
         profile.nom = "Steve"
         profile.prenom = "Fotso Eddy"
@@ -76,5 +77,9 @@ class Command(BaseCommand):
 
         profile.save()
 
-        verb = "Created" if created else "Updated"
-        self.stdout.write(self.style.SUCCESS(f"{verb} profile for {profile.prenom} {profile.nom} (3 years experience)."))
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Created profile for {profile.prenom} {profile.nom} "
+                f"({profile.années_experience} years experience, {profile.projets_contribues}+ projects contributed to)."
+            )
+        )

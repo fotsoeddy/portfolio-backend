@@ -7,6 +7,10 @@ class Command(BaseCommand):
     help = "Seeds the database with example testimonials"
 
     def handle(self, *args, **kwargs):
+        deleted, _ = Temoignage.objects.all().delete()
+        if deleted:
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted} existing testimonial row(s)."))
+
         # No photo is attached — these are illustrative placeholder
         # testimonials, not real client photos, so the frontend falls back
         # to an initials avatar rather than a stock/stolen headshot.
@@ -50,14 +54,12 @@ class Command(BaseCommand):
         ]
 
         for data in testimonials_data:
-            testimonial, created = Temoignage.objects.get_or_create(
+            Temoignage.objects.create(
                 titre=data["titre"],
                 position=data["position"],
-                defaults={"temoignage": data["temoignage"], "etoiles": data["etoiles"]},
+                temoignage=data["temoignage"],
+                etoiles=data["etoiles"],
             )
-            if created:
-                self.stdout.write(self.style.SUCCESS(f"Created testimonial: {data['titre']}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Testimonial already exists: {data['titre']}"))
+            self.stdout.write(self.style.SUCCESS(f"Created testimonial: {data['titre']}"))
 
         self.stdout.write(self.style.SUCCESS("Finished seeding testimonials."))

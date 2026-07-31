@@ -5,6 +5,10 @@ class Command(BaseCommand):
     help = 'Seeds the database with default services'
 
     def handle(self, *args, **kwargs):
+        deleted, _ = Service.objects.all().delete()
+        if deleted:
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted} existing service row(s)."))
+
         services_data = [
             {
                 'nom': 'AI Automation',
@@ -37,13 +41,7 @@ class Command(BaseCommand):
         ]
 
         for data in services_data:
-            service, created = Service.objects.get_or_create(
-                nom=data['nom'], 
-                defaults={'description': data['description']}
-            )
-            if created:
-                self.stdout.write(self.style.SUCCESS(f"Successfully created service: {data['nom']}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Service already exists: {data['nom']}"))
+            Service.objects.create(nom=data['nom'], description=data['description'])
+            self.stdout.write(self.style.SUCCESS(f"Created service: {data['nom']}"))
 
         self.stdout.write(self.style.SUCCESS('Finished seeding services.'))

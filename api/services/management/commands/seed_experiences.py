@@ -6,6 +6,10 @@ class Command(BaseCommand):
     help = 'Seeds the database with default experiences'
 
     def handle(self, *args, **kwargs):
+        deleted, _ = Experience.objects.all().delete()
+        if deleted:
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted} existing experience row(s)."))
+
         experiences_data = [
             {
                 'titre': 'Mobile/Software Engineer',
@@ -46,20 +50,15 @@ class Command(BaseCommand):
         ]
 
         for data in experiences_data:
-            experience, created = Experience.objects.get_or_create(
+            Experience.objects.create(
                 titre=data['titre'],
                 compagnie=data['compagnie'],
-                defaults={
-                    'description': data['description'],
-                    'date_debut': data['date_debut'],
-                    'date_fin': data['date_fin'],
-                    'position': data['position'],
-                    'pays': data['pays']
-                }
+                description=data['description'],
+                date_debut=data['date_debut'],
+                date_fin=data['date_fin'],
+                position=data['position'],
+                pays=data['pays'],
             )
-            if created:
-                self.stdout.write(self.style.SUCCESS(f"Successfully created experience: {data['titre']} at {data['compagnie']}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Experience already exists: {data['titre']} at {data['compagnie']}"))
+            self.stdout.write(self.style.SUCCESS(f"Created experience: {data['titre']} at {data['compagnie']}"))
 
         self.stdout.write(self.style.SUCCESS('Finished seeding experiences.'))
