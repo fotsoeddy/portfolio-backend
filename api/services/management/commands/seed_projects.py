@@ -9,6 +9,10 @@ class Command(BaseCommand):
     help = "Seeds (or updates) example project categories and projects"
 
     def handle(self, *args, **kwargs):
+        deleted, _ = Projet.objects.all().delete()
+        if deleted:
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted} existing project(s)."))
+
         projects_data = [
             {
                 "titre": "Frontend Storefront",
@@ -64,33 +68,20 @@ class Command(BaseCommand):
             categorie_nom, categorie_type = data["categorie"]
             category, _ = CategorieProjet.objects.get_or_create(nom=categorie_nom, defaults={"type_projet": categorie_type})
 
-            project, created = Projet.objects.get_or_create(
+            project = Projet.objects.create(
                 titre=data["titre"],
-                defaults={
-                    "categorie": category,
-                    "description": data["description"],
-                    "technologies": data["technologies"],
-                    "lien_github": data["lien_github"],
-                    "lien_demo": data["lien_demo"],
-                },
+                categorie=category,
+                description=data["description"],
+                technologies=data["technologies"],
+                lien_github=data["lien_github"],
+                lien_demo=data["lien_demo"],
             )
 
-            if not created:
-                project.categorie = category
-                project.description = data["description"]
-                project.technologies = data["technologies"]
-                project.lien_github = data["lien_github"]
-                project.lien_demo = data["lien_demo"]
-                project.save()
-
-            if not project.image:
-                project.image.save(
-                    f"{project.pk}.jpg",
-                    generate_placeholder(data["titre"], f"project-{project.pk}.jpg"),
-                    save=True,
-                )
-
-            verb = "Created" if created else "Updated"
-            self.stdout.write(self.style.SUCCESS(f"{verb} project: {data['titre']}"))
+            project.image.save(
+                f"{project.pk}.jpg",
+                generate_placeholder(data["titre"], f"project-{project.pk}.jpg"),
+                save=True,
+            )
+            self.stdout.write(self.style.SUCCESS(f"Created project: {data['titre']}"))
 
         self.stdout.write(self.style.SUCCESS("Finished seeding projects."))

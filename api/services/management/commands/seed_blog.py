@@ -49,23 +49,18 @@ class Command(BaseCommand):
         for data in posts_data:
             category, _ = CategoriBlog.objects.get_or_create(nom=data["categorie"])
 
-            post, created = Blog.objects.get_or_create(
+            post = Blog.objects.create(
                 titre=data["titre"],
-                defaults={
-                    "auteur": "Fotso Eddy Steve",
-                    "categorie": category,
-                    "description": data["description"],
-                },
+                auteur="Fotso Eddy Steve",
+                categorie=category,
+                description=data["description"],
             )
 
-            if created:
-                post.image.save(
-                    f"{post.pk}.jpg",
-                    generate_placeholder(data["titre"], f"blog-{post.pk}.jpg"),
-                    save=True,
-                )
-                self.stdout.write(self.style.SUCCESS(f"Created blog post: {data['titre']} (slug={post.slug})"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Blog post already exists: {data['titre']}"))
+            post.image.save(
+                f"{post.pk}.jpg",
+                generate_placeholder(data["titre"], f"blog-{post.pk}.jpg"),
+                save=True,
+            )
+            self.stdout.write(self.style.SUCCESS(f"Created blog post: {data['titre']} (slug={post.slug})"))
 
         self.stdout.write(self.style.SUCCESS("Finished seeding blog posts."))
