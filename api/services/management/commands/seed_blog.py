@@ -9,6 +9,10 @@ class Command(BaseCommand):
     help = "Seeds the database with example blog categories and posts"
 
     def handle(self, *args, **kwargs):
+        deleted, _ = Blog.objects.all().delete()
+        if deleted:
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted} existing blog post(s)."))
+
         posts_data = [
             {
                 "titre": "Dockerizing a Django + Next.js App: A Full Guide",
