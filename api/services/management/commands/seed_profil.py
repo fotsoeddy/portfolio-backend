@@ -5,7 +5,11 @@ from django.core.management.base import BaseCommand
 
 from services.models import Profil
 
-PORTFOLIO_DIR = Path(__file__).resolve().parents[5] / "portfolio"
+# Bundled inside this Django project (services/seed_assets/) rather than
+# reached across into the sibling `portfolio` frontend repo — that sibling
+# directory doesn't exist inside the Docker image/container, which only ever
+# contains this api/ directory's contents.
+SEED_ASSETS_DIR = Path(__file__).resolve().parents[2] / "seed_assets"
 
 
 class Command(BaseCommand):
@@ -59,9 +63,9 @@ class Command(BaseCommand):
         profile.années_experience = 3
         profile.projets_contribues = 25
 
-        photo_path = PORTFOLIO_DIR / "assets" / "profile2.jpeg"
-        photo_about_path = PORTFOLIO_DIR / "assets" / "user-image.png"
-        cv_path = PORTFOLIO_DIR / "public" / "Fotso_Eddy_CV.pdf"
+        photo_path = SEED_ASSETS_DIR / "profile2.jpeg"
+        photo_about_path = SEED_ASSETS_DIR / "user-image.png"
+        cv_path = SEED_ASSETS_DIR / "Fotso_Eddy_CV.pdf"
 
         if not profile.photo and photo_path.exists():
             with open(photo_path, "rb") as fh:
